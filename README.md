@@ -32,17 +32,52 @@ Untuk mencapai target tersebut, diajukan dua pendekatan algoritma sistem rekomen
    * Mengoptimalkan model menggunakan fungsi *loss* **Binary Crossentropy** dan optimizer **Adam** guna memprediksi skor preferensi buku yang belum pernah dibaca oleh pengguna.
 
 ## Data Understanding
-Paragraf awal bagian ini menjelaskan informasi mengenai jumlah data, kondisi data, dan informasi mengenai data yang digunakan. Sertakan juga sumber atau tautan untuk mengunduh dataset. Contoh: [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Restaurant+%26+consumer+data).
 
-Selanjutnya, uraikanlah seluruh variabel atau fitur pada data. Sebagai contoh:  
+Dataset yang digunakan dalam proyek ini adalah **Goodbooks-10k Dataset** yang dipublikasikan oleh [Zygmunt Zając di GitHub goodbooks-10k](https://github.com/zygmuntz/goodbooks-10k/). Dataset ini berisi informasi 10.000 judul buku terpopuler dan hampir 6 juta interaksi penilaian (*ratings*) yang diberikan oleh 53.424 pengguna unik.
 
-Variabel-variabel pada Restaurant UCI dataset adalah sebagai berikut:
-- accepts : merupakan jenis pembayaran yang diterima pada restoran tertentu.
-- cuisine : merupakan jenis masakan yang disajikan pada restoran.
-- dst
+Dataset terdiri dari dua berkas utama:
+* **books.csv**: Memiliki dimensi 10.000 baris dan 23 kolom metadata buku.
+* **ratings.csv**: Memiliki dimensi 5.976.479 baris dan 3 kolom interaksi pengguna terhadap buku.
 
-**Rubrik/Kriteria Tambahan (Opsional)**:
-- Melakukan beberapa tahapan yang diperlukan untuk memahami data, contohnya teknik visualisasi data beserta insight atau exploratory data analysis.
+### Variabel-variabel pada Dataset:
+
+**1. Berkas `books.csv`:**
+* `book_id`: ID unik untuk setiap buku dalam sistem.
+* `goodreads_book_id` & `best_book_id`: ID unik buku pada sistem basis data Goodreads.
+* `work_id`: ID unik karya buku secara abstrak yang mengagregasi berbagai edisi cetak.
+* `books_count`: Jumlah edisi yang tersedia untuk karya buku tersebut.
+* `isbn` & `isbn13`: Kode standar identifikasi buku internasional.
+* `authors`: Nama penulis atau kreator buku.
+* `original_publication_year`: Tahun pertama kali buku diterbitkan.
+* `original_title`: Judul asli buku sebelum diterjemahkan.
+* `title`: Judul resmi buku.
+* `language_code`: Kode bahasa yang digunakan pada buku (misal: `eng`, `en-US`, `spa`).
+* `average_rating`: Nilai rata-rata rating buku (skala 1 - 5).
+* `ratings_count`: Jumlah total ulasan penilaian yang diterima buku.
+* `work_ratings_count` & `work_text_reviews_count`: Total akumulasi rating dan ulasan teks dari seluruh edisi.
+* `ratings_1` s/d `ratings_5`: Jumlah rincian skor rating dari bintang 1 hingga bintang 5.
+* `image_url` & `small_image_url`: Tautan URL gambar sampul buku.
+
+**2. Berkas `ratings.csv`:**
+* `user_id`: ID unik pengguna yang memberikan penilaian.
+* `book_id`: ID unik buku yang dinilai.
+* `rating`: Skor penilaian yang diberikan oleh pengguna.
+
+---
+
+### Exploratory Data Analysis (EDA)
+
+Berdasarkan hasil eksplorasi data yang dilakukan pada notebook:
+
+1. **Pengecekan Data Duplikat dan Missing Value**:
+   * Pada `ratings.csv` tidak ditemukan data *missing value* maupun data duplikat.
+   * Pada `books.csv` tidak terdapat data duplikat namun terdapat beberapa *missing value* pada kolom non-esensial seperti `language_code` (1.084 baris), `isbn` (700 baris), dan `original_title` (585 baris). Kolom utama yang digunakan dalam sistem rekomendasi (`title`, `authors`, `book_id`, `average_rating`) berstatus lengkap (10.000 non-null).
+  
+2. **Analisis Karakteristik Data & Visualisasi**:
+   * **Top Penulis Populer**: Stephen King menempati posisi teratas sebagai penulis paling produktif dengan 60 judul buku di dalam katalog dataset, diikuti oleh Nora Roberts dan Dean Koontz.
+   * **Top Buku Paling Populer**: Buku *The Hunger Games (The Hunger Games, #1)* dan *Harry Potter and the Sorcerer's Stone* menjadi buku dengan jumlah rating terbanyak, melebihi 4,5 juta ulasan.
+   * **Distribusi Skor Rating Pengguna**: Distribusi skor rating pembaca didominasi oleh rating $4$ dan $5$, yang mencerminkan kecenderungan kepuasan positif dari para pembaca buku populer.
+   * **Distribusi Average Rating**: Rata-rata rating buku berpusat pada nilai $\approx 4.0$ dengan kurva mendekati distribusi normal (*bell-shaped curve*).
 
 ## Data Preparation
 Pada bagian ini Anda menerapkan dan menyebutkan teknik data preparation yang dilakukan. Teknik yang digunakan pada notebook dan laporan harus berurutan.
