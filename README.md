@@ -5,7 +5,7 @@
 Dalam era perkembangan teknologi digital saat ini, ketersediaan informasi dan pilihan buku bacaan telah meningkat secara masif. Jutaan judul buku dengan beragam genre, topik, dan gaya penulisan dapat diakses dengan mudah melalui toko buku daring maupun platform perpustakaan digital. Namun, kelimpahan pilihan ini kerap menimbulkan fenomena kelebihan informasi (*information overload*), di mana pengguna mengalami kesulitan untuk menemukan literatur yang sesuai dengan preferensi, minat, serta riwayat bacaan mereka secara cepat dan relevan (Ricci et al., 2015).
 
 **Mengapa dan Bagaimana Masalah Ini Harus Diselesaikan:**
-* **Urgensi bagi Pengguna dan Industri**: Tanpa mekanisme penyaringan yang cerdas, pembaca cenderung menghabiskan waktu lama hanya untuk menelusuri katalog tanpa menemukan buku yang tepat, yang berpotensi menurunkan minat bacat dan keterlibatan pengguna pada platform digital.
+* **Urgensi bagi Pengguna dan Industri**: Tanpa mekanisme penyaringan yang cerdas, pembaca cenderung menghabiskan waktu lama hanya untuk menelusuri katalog tanpa menemukan buku yang tepat, yang berpotensi menurunkan minat baca dan keterlibatan pengguna pada platform digital.
 * **Solusi Pendekatan Machine Learning**: Untuk menjawab tantangan tersebut, sistem rekomendasi berbasis *machine learning* menjadi solusi kunci. Pendekatan *Collaborative Filtering* terbukti mampu menangkap preferensi implisit dan eksplisit pembaca melalui pemodelan pola interaksi antar-pengguna (Koren et al., 2009). Sementara itu, pendekatan *Content-Based Filtering* melengkapi personalisasi dengan memanfaatkan atribut konten buku menggunakan teknik representatif teks (Lops et al., 2011). Pada proyek ini, kedua paradigma tersebut diterapkan menggunakan dataset [Goodbooks-10k Dataset](https://www.kaggle.com/datasets/zygmunt/goodbooks-10k) (Zając, 2017) guna menghasilkan sistem rekomendasi buku (*Top-N Recommendation*) yang presisi dan adaptif.
 
 ## Business Understanding
@@ -24,7 +24,7 @@ Pengembangan sistem rekomendasi ini ditujukan untuk memfasilitasi pembaca dalam 
 Untuk mencapai target tersebut, diajukan dua pendekatan algoritma sistem rekomendasi:
 1. **Content-Based Filtering**:
    * Memanfaatkan fitur metadata konten buku (`title` dan `authors`)
-   * Menggunakan teknik representasi tteks *Term Frequency-Inverse Document Frequency* (**TF-IDF Vectorizer**) untuk mengekstrasi vektor kata kunci, kemudian menghitung derajat kesamaan antar-vektor buku menggunakan **Cosine Similarity**.
+   * Menggunakan teknik representasi teks *Term Frequency-Inverse Document Frequency* (**TF-IDF Vectorizer**) untuk mengekstraksi vektor kata kunci, kemudian menghitung derajat kesamaan antar-vektor buku menggunakan **Cosine Similarity**.
    * Menghasilkan rekomendasi buku berdasarkan skor kesamaan tertinggi terhadap buku yang pernah dibaca pengguna.
 2. **Collaborative Filtering**:
    * Memanfaatkan data interaksi eksplisit berupa riwayat pemberian rating terhadap buku (`user_id`, `book_id`, `rating`).
@@ -102,7 +102,7 @@ Tahapan ini dilakukan secara berurutan untuk menyesuaikan kebutuhan input dari m
   * **Proses**: Mengambil sampel $100.000$ interaksi rating secara acak dari total $\approx 6$ juta baris data dengan `random_state=42`.
   * **Alasan**: Mengoptimalkan konsumsi memori dan efisiensi waktu komputasi pelatihan Deep Learning tanpa mengorbankan variasi interaksi data.
 * **Encoding ID Pengguna dan Buku ke Indeks Integer**:
-  * **Proses**: Memetakan `user_id` dan `book_id` unik ke dalam indeks integer berurutan (0 hinggaa $N-1$) serta membuat *reverse mapping dictionary*.
+  * **Proses**: Memetakan `user_id` dan `book_id` unik ke dalam indeks integer berurutan (0 hingga $N-1$) serta membuat *reverse mapping dictionary*.
   * **Alasan**: Lapisan *Embedding* pada model jaringan saraf tiruan membutuhkan input indeks diskrit berurutan untuk menginisialisasi tabel matriks bobot representasi vektor laten.
 * **Normalisasi Nilai Rating (*Min-Max Scaling*)**:
   * **Proses**: Mentransformasikan nilai rating skala 1 - 5 ke rentang angka interval [0, 1] menggunakan formula: `rating_norm = (rating - min_rating) / (max_rating - min_rating)`
@@ -191,7 +191,7 @@ Contoh pengujian rekomendasi personal untuk **User ID: 43140**
   Pada sistem rekomendasi konten buku ini, sebuah buku dalam daftar Top-$K$ ($K=10$) dikategorikan **relevan** apabila judul atau nama penulisnya memiliki korelasi langsung terhadap tema/karya buku acuan (*The Hunger Games* atau *Suzanne Collins*).
 * **Hasil Evaluasi**:
   Dari 10 buku yang direkomendasikan untuk buku *The Hunger Games (The Hunger Games, #1)*, terdapat 8 buku yang terbukti relevan secara langsung dengan seri tersebut (termasuk sekuel resmi, *boxset*, dan *official guide*).
-  $$\text{Precision@10} = \frac{8}{10} = 80.0\%$$
+  $$\text{Precision@10} = \frac{8}{10} = 80.0$$ (dalam persentase).
   Hasil ini membuktikan bahwa pendekatan *Content-Based Filtering* sangat efektif dalam menemukan buku-buku yang memiliki keselarasan konteks dan tema yang tinggi.
 
 ---
