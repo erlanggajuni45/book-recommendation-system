@@ -80,11 +80,36 @@ Berdasarkan hasil eksplorasi data yang dilakukan pada notebook:
    * **Distribusi Average Rating**: Rata-rata rating buku berpusat pada nilai $\approx 4.0$ dengan kurva mendekati distribusi normal (*bell-shaped curve*).
 
 ## Data Preparation
-Pada bagian ini Anda menerapkan dan menyebutkan teknik data preparation yang dilakukan. Teknik yang digunakan pada notebook dan laporan harus berurutan.
+Tahapan ini dilakukan secara berurutan untuk menyesuaikan kebutuhan input dari masing-masing pendekatan algoritma rekomendasi:
 
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan proses data preparation yang dilakukan
-- Menjelaskan alasan mengapa diperlukan tahapan data preparation tersebut.
+### 1. Data Preparation untuk Content-Based Filtering
+
+* **Pemilihan Fitur Relevan dan Penanganan Missing Value**:
+  * **Proses**: Memilih kolom esensial (`book_id`, `title`, `authors`, dan `average_rating`) serta membuang baris yang memiliki nilai null (`dropna()`).
+  * **Alasan**: Menghindari kesalahan komputasi saat ekstraksi representasi teks dan menjaga konsistensi metadata katalog.
+* **Penghapusan Duplikasi Judul Buku**:
+  * **Proses**: Menghapus baris dengan judul buku duplikat (`drop_duplicates(subset=['title'])`).
+  * **Alasan**: Mencegah model menghasilkan rekomendasi ganda dari buku yang sama sehingga output matriks kesamaan bersifatt unik ($9.964$ buku unik).
+* **Penggabungan Fitur Metadata Konten (*Content Feature Fusion*)**:
+  * **Proses**: Menggabungkan teks judul dan nama penulis ke dalam kolom baru `content_features` (`df_cb['title'] + ' ' + df_cb['authors']`).
+  * **Alasan**: Memberikan konteks yang lebih kaya bagi algoritma ekstraksi teks agar dapat menangkap kemiripan tidak hanya dari kata kunci judul, tetapi juga dari kesamaan penulis.
+
+---
+
+### 2. Data Preparation untuk Collaborative Filtering
+
+* **Pengambilan Sampel Representatif (*Sampling*)**:
+  * **Proses**: Mengambil sampel $100.000$ interaksi rating secara acak dari total $\approx 6$ juta baris data dengan `random_state=42`.
+  * **Alasan**: Mengoptimalkan konsumsi memori dan efisiensi waktu komputasi pelatihan Deep Learning tanpa mengorbankan variasi interaksi data.
+* **Encoding ID Pengguna dan Buku ke Indeks Integer**:
+  * **Proses**: Memetakan `user_id` dan `book_id` unik ke dalam indeks integer berurutan (0 hinggaa $N-1$) serta membuat *reverse mapping dictionary*.
+  * **Alasan**: Lapisan *Embedding* pada model jaringan saraf tiruan membutuhkan input indeks diskrit berurutan untuk menginisialisasi tabel matriks bobot representasi vektor laten.
+* **Normalisasi Nilai Rating (*Min-Max Scaling*)**:
+  * **Proses**: Mentransformasikan nilai rating skala 1 - 5 ke rentang angka interval [0, 1] menggunakan formula: `rating_norm = (rating - min_rating) / (max_rating - min_rating)`
+  * **Alasan**: Memudahkan konvergensi fungsi optimasi dan menyesuaikan dengan fungsi aktivasi output *Sigmoid* pada model deep learning yang menghasilkan rentang skor probabilitas [0, 1].
+* **Pengacakan dan Pembagian Dataset (*Train-Validation Split*)**:
+  * **Proses**: Mengacak dataset interaksi dan membaginya dengan proporsi 80% data latih dan 20% data validasi.
+  * **Alasan**: Menyediakan subset validasi independen yang belum pernah dilihat oleh model selama proses pelatihan untuk memantau performa *loss* dan menghindari *overfitting*.
 
 ## Modeling
 Tahapan ini membahas mengenai model sisten rekomendasi yang Anda buat untuk menyelesaikan permasalahan. Sajikan top-N recommendation sebagai output.
