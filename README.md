@@ -178,16 +178,37 @@ Contoh pengujian rekomendasi personal untuk **User ID: 43140**
 | 10 | Brief Lives (The Sandman #7) | Neil Gaiman, Jill Thompson, Vince Locke, Peter Doherty | 4.55 |
 
 ---
+
 ## Evaluation
-Pada bagian ini Anda perlu menyebutkan metrik evaluasi yang digunakan. Kemudian, jelaskan hasil proyek berdasarkan metrik evaluasi tersebut.
 
-Ingatlah, metrik evaluasi yang digunakan harus sesuai dengan konteks data, problem statement, dan solusi yang diinginkan.
+### 1. Evaluasi Content-Based Filtering: Precision@K
 
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan formula metrik dan bagaimana metrik tersebut bekerja.
+* **Formula dan Cara Kerja**:
+  Metrik **Precision@K** digunakan untuk mengukur seberapa relevan item-item yang disajikan pada daftar $K$ rekomendasi teratas:
 
-**---Ini adalah bagian akhir laporan---**
+  $$\text{Precision@K} = \frac{\text{Jumlah Item Rekomendasi yang Relevan}}{K}$$
 
-_Catatan:_
-- _Anda dapat menambahkan gambar, kode, atau tabel ke dalam laporan jika diperlukan. Temukan caranya pada contoh dokumen markdown di situs editor [Dillinger](https://dillinger.io/), [Github Guides: Mastering markdown](https://guides.github.com/features/mastering-markdown/), atau sumber lain di internet. Semangat!_
-- Jika terdapat penjelasan yang harus menyertakan code snippet, tuliskan dengan sewajarnya. Tidak perlu menuliskan keseluruhan kode project, cukup bagian yang ingin dijelaskan saja.
+  Pada sistem rekomendasi konten buku ini, sebuah buku dalam daftar Top-$K$ ($K=10$) dikategorikan **relevan** apabila judul atau nama penulisnya memiliki korelasi langsung terhadap tema/karya buku acuan (*The Hunger Games* atau *Suzanne Collins*).
+* **Hasil Evaluasi**:
+  Dari 10 buku yang direkomendasikan untuk buku *The Hunger Games (The Hunger Games, #1)*, terdapat 8 buku yang terbukti relevan secara langsung dengan seri tersebut (termasuk sekuel resmi, *boxset*, dan *official guide*).
+  $$\text{Precision@10} = \frac{8}{10} = 80.0\%$$
+  Hasil ini membuktikan bahwa pendekatan *Content-Based Filtering* sangat efektif dalam menemukan buku-buku yang memiliki keselarasan konteks dan tema yang tinggi.
+
+---
+
+### 2. Evaluasi Collaborative Filtering: Root Mean Squared Error (RMSE)
+
+* **Formula dan Cara Kerja**:
+  Metrik **Root Mean Squared Error (RMSE)** digunakan untuk mengukur rata-rata besarnya kesalahan prediksi rating yang dihasilkan oleh model terhadap nilai rating aktual yang telah dinormalisasi:
+
+  $$\text{RMSE} = \sqrt{\frac{1}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)^2}$$
+
+  Di mana $N$ adalah jumlah data evaluasi, $y_i$ adalah rating aktual ternormalisasi, dan $\hat{y}_i$ adalah skor rating yang diprediksi oleh model. Semakin kecil nilai RMSE, semakin akurat model dalam memprediksi preferensi pengguna.
+* **Hasil Evaluasi**:
+  Setelah melalui proses pelatihan selama 15 *epochs*, model *RecommenderNet* menghasilkan performa evaluasi sebagai berikut:
+  * **Training RMSE**: $\approx 0.2546$
+  * **Validation RMSE**: $\approx 0.2823$
+  * **Training Loss (Binary Crossentropy)**: $\approx 0.5950$
+  * **Validation Loss (Binary Crossentropy)**: $\approx 0.6283$
+
+Plot konvergensi pada grafik pelatihan menunjukkan penurunan kurva *loss* dan RMSE yang stabil antara data latih dan data validasi tanpa adanya indikasi *overfitting* yang signifikan. Hal ini menunjukkan model mampu memprediksi preferensi laten pembaca dengan tingkat kesalahan yang rendah.
