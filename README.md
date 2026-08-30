@@ -112,12 +112,72 @@ Tahapan ini dilakukan secara berurutan untuk menyesuaikan kebutuhan input dari m
   * **Alasan**: Menyediakan subset validasi independen yang belum pernah dilihat oleh model selama proses pelatihan untuk memantau performa *loss* dan menghindari *overfitting*.
 
 ## Modeling
-Tahapan ini membahas mengenai model sisten rekomendasi yang Anda buat untuk menyelesaikan permasalahan. Sajikan top-N recommendation sebagai output.
 
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menyajikan dua solusi rekomendasi dengan algoritma yang berbeda.
-- Menjelaskan kelebihan dan kekurangan dari solusi/pendekatan yang dipilih.
+Pada tahap ini, dibangun dua pendekatan sistem rekomendasi yang berbeda untuk menyelesaikan permasalahan pencarian dan personalisasi buku bacaan:
 
+### 1. Model 1: Content-Based Filtering (TF-IDF Vectorizer & Cosine Similarity)
+
+* **Cara Kerja**:
+  * Pendekatan ini mengekstraksi representasi fitur kata kunci dari judul dan nama penulis (`content_features`) menggunakan **TF-IDF Vectorizer** dengan menghapus *english stop words*, menghasilkan matriks representasi berdimensi `(9964, 14219)`.
+  * Derajat kesamaan antar-buku dihitung menggunakan **Cosine Similarity** untuk menghasilkan matriks kesamaan kosinus.
+  * Sistem mengambil indeks buku acuan dan menyajikan $N$ buku teratas dengan skor kemiripan kosinus tertinggi.
+* **Kelebihan**:
+  * Tidak bergantung pada data interaksi pengguna lain (*user-independent*).
+  * Tidak mengalami masalah *cold-start* untuk buku-buku baru selama metadata kontennya tersedia.
+  * Mampu merekomendasikan buku-buku spesifik atau lanjutan dalam satu seri/universe kepenulisan yang sama.
+* **Kekurangan**:
+  * Rentan terhadap fenomena *overspecialization* (rekomendasi cenderung terbatas pada tema/penulis yang mirip dan kurang eksploratif).
+  * Tidak dapat menangkap kualitas subjektif buku atau preferensi implisit antar-pengguna.
+
+#### Output Top-10 Rekomendasi Content-Based Filtering:
+Contoh pengujian rekomendasi untuk buku: **The Hunger Games (The Hunger Games, #1)**
+
+| No | Judul Buku | Penulis | Average Rating | Similarity Score |
+|---|---|---|---|---|
+| 1 | The Hunger Games Trilogy Boxset (The Hunger Games, #1-3) | Suzanne Collins | 4.49 | 0.9129 |
+| 2 | Catching Fire (The Hunger Games, #2) | Suzanne Collins | 4.30 | 0.8075 |
+| 3 | Mockingjay (The Hunger Games, #3) | Suzanne Collins | 4.03 | 0.7975 |
+| 4 | The World of the Hunger Games (Hunger Games Trilogy) | Kate Egan | 4.48 | 0.7716 |
+| 5 | The Hunger Games Tribute Guide | Emily Seife | 4.40 | 0.4972 |
+| 6 | The Hunger Games: Official Illustrated Movie Companion | Kate Egan | 4.51 | 0.4452 |
+| 7 | Hunger (Gone, #2) | Michael Grant | 4.02 | 0.3703 |
+| 8 | A Hunger Like No Other (Immortals After Dark #2) | Kresley Cole | 4.21 | 0.2922 |
+| 9 | The Quillan Games (Pendragon, #7) | D.J. MacHale | 4.19 | 0.2842 |
+| 10 | Nemesis Games (The Expanse, #5) | James S.A. Corey | 4.37 | 0.2806 |
+
+---
+
+### 2. Model 2: Collaborative Filtering (Deep Learning RecommenderNet)
+
+* **Cara Kerja**:
+  * Membangun model jaringan saraf tiruan kustom berbasis *Embedding Layer* (`RecommenderNet`) menggunakan TensorFlow/Keras.
+  * Model memetakan `num_users` (44.477 pengguna) dan `num_books` (9.521 buku) ke dalam ruang vektor laten berdimensi 50 (*embedding size* = 50) dengan regularisasi L2 ($1\text{e-}6$) dan inisialisasi bobot `he_normal`.
+  * Vektor representasi pengguna dan buku dihitung perkalian titiknya (*dot product*), ditambahkan bias pengguna dan bias buku, kemudian dilewatkan pada fungsi aktivasi *Sigmoid* untuk menghasilkan prediksi rating terstandardisasi pada interval [0, 1].
+  * Model dilatih selama 15 *epochs* dengan optimizer *Adam* (learning rate 0.001) dan fungsi *loss* *Binary Crossentropy*.
+* **Kelebihan**:
+  * Mampu memberikan rekomendasi lintas genre yang tidak terduga (*serendipity*) berdasarkan pola kesamaan selera antarpengguna.
+  * Tidak memerlukan rekayasa fitur metadata konten teks yang rumit.
+* **Kekurangan**:
+  * Mengalami kendala *cold-start problem* untuk pengguna baru atau buku baru yang belum memiliki riwayat rating.
+  * Membutuhkan daya komputasi dan memori yang lebih besar untuk proses pelatihan matriks embedding.
+
+#### Output Top-10 Rekomendasi Collaborative Filtering:
+Contoh pengujian rekomendasi personal untuk **User ID: 43140**
+
+| No | Judul Buku | Penulis | Average Rating |
+|---|---|---|---|
+| 1 | Harry Potter and the Goblet of Fire (Harry Potter, #4) | J.K. Rowling, Mary GrandPré | 4.53 |
+| 2 | Harry Potter and the Deathly Hallows (Harry Potter, #7) | J.K. Rowling, Mary GrandPré | 4.61 |
+| 3 | Unbroken: A World War II Story of Survival, Resilience, and Redemption | Laura Hillenbrand | 4.40 |
+| 4 | Cutting for Stone | Abraham Verghese | 4.28 |
+| 5 | Harry Potter Boxset (Harry Potter, #1-7) | J.K. Rowling | 4.74 |
+| 6 | Hyperion (Hyperion Cantos, #1) | Dan Simmons | 4.21 |
+| 7 | The Little House Collection (Little House, #1-9) | Laura Ingalls Wilder, Garth Williams | 4.33 |
+| 8 | Words of Radiance (The Stormlight Archive, #2) | Brandon Sanderson | 4.77 |
+| 9 | The Complete Anne of Green Gables Boxed Set (Anne of Green Gables, #1-8) | L.M. Montgomery | 4.42 |
+| 10 | Brief Lives (The Sandman #7) | Neil Gaiman, Jill Thompson, Vince Locke, Peter Doherty | 4.55 |
+
+---
 ## Evaluation
 Pada bagian ini Anda perlu menyebutkan metrik evaluasi yang digunakan. Kemudian, jelaskan hasil proyek berdasarkan metrik evaluasi tersebut.
 
