@@ -10,31 +10,26 @@ Dalam era perkembangan teknologi digital saat ini, ketersediaan informasi dan pi
 
 ## Business Understanding
 
-Pada bagian ini, Anda perlu menjelaskan proses klarifikasi masalah.
-
-Bagian laporan ini mencakup:
+Pengembangan sistem rekomendasi ini ditujukan untuk memfasilitasi pembaca dalam menemukan buku bacaan yang relevan dan personal, sekaligus meningkatkan *user engagement* serta retensi pengguna pada katalog buku daring.
 
 ### Problem Statements
-
-Menjelaskan pernyataan masalah:
-- Pernyataan Masalah 1
-- Pernyataan Masalah 2
-- Pernyataan Masalah n
+* Bagaimana cara merekomendasikan buku lain yang memiliki kemiripan konten, tema, atau kepenulisan dengan buku tertentu yang disukai oleh pembaca?
+* Bagaimana cara memprediksi dan merekomendasikan buku yang dipersonalisasi untuk seorang pengguna berdasarkan riwayat interaksi dan pola penilaian (*rating*) dari pengguna lain?
 
 ### Goals
+* Menghasilkan sistem rekomendasi berbasis *Content-Based Filtering* yang mampu menyajikan $N$ buku teratas yang paling mirip dengan buku acuan berdasarkan representasi atribut teks (judul dan penulis).
+* Membangun model *Collaborative Filtering* berbasis *Deep Learning* yang mampu mempelajari preferensi laten pengguna dan menyajikan $N$ buku rekomendasi yang dipersonalisasi dengan tingkat kesalahan prediksi (*error*) yang minimal.
 
-Menjelaskan tujuan proyek yang menjawab pernyataan masalah:
-- Jawaban pernyataan masalah 1
-- Jawaban pernyataan masalah 2
-- Jawaban pernyataan masalah n
-
-Semua poin di atas harus diuraikan dengan jelas. Anda bebas menuliskan berapa pernyataan masalah dan juga goals yang diinginkan.
-
-**Rubrik/Kriteria Tambahan (Opsional)**:
-- Menambahkan bagian “Solution Approach” yang menguraikan cara untuk meraih goals. Bagian ini dibuat dengan ketentuan sebagai berikut: 
-
-    ### Solution statements
-    - Mengajukan 2 atau lebih solution approach (algoritma atau pendekatan sistem rekomendasi).
+### Solution Approach
+Untuk mencapai target tersebut, diajukan dua pendekatan algoritma sistem rekomendasi:
+1. **Content-Based Filtering**:
+   * Memanfaatkan fitur metadata konten buku (`title` dan `authors`)
+   * Menggunakan teknik representasi tteks *Term Frequency-Inverse Document Frequency* (**TF-IDF Vectorizer**) untuk mengekstrasi vektor kata kunci, kemudian menghitung derajat kesamaan antar-vektor buku menggunakan **Cosine Similarity**.
+   * Menghasilkan rekomendasi buku berdasarkan skor kesamaan tertinggi terhadap buku yang pernah dibaca pengguna.
+2. **Collaborative Filtering**:
+   * Memanfaatkan data interaksi eksplisit berupa riwayat pemberian rating terhadap buku (`user_id`, `book_id`, `rating`).
+   * Membangun arsitektur jaringan saraf tiruan (**RecommenderNet**) menggunakan *Embedding Layers* untuk memetakan pengguna dan buku ke dalam ruang vektor laten (*latent feature space*).
+   * Mengoptimalkan model menggunakan fungsi *loss* **Binary Crossentropy** dan optimizer **Adam** guna memprediksi skor preferensi buku yang belum pernah dibaca oleh pengguna.
 
 ## Data Understanding
 Paragraf awal bagian ini menjelaskan informasi mengenai jumlah data, kondisi data, dan informasi mengenai data yang digunakan. Sertakan juga sumber atau tautan untuk mengunduh dataset. Contoh: [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Restaurant+%26+consumer+data).
