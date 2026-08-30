@@ -111,7 +111,7 @@ Tahapan ini dilakukan secara berurutan untuk menyesuaikan kebutuhan input dari m
   * **Proses**: Mengacak dataset interaksi dan membaginya dengan proporsi 80% data latih dan 20% data validasi.
   * **Alasan**: Menyediakan subset validasi independen yang belum pernah dilihat oleh model selama proses pelatihan untuk memantau performa *loss* dan menghindari *overfitting*.
 
-## Modeling
+## Modeling and Result
 
 Pada tahap ini, dibangun dua pendekatan sistem rekomendasi yang berbeda untuk menyelesaikan permasalahan pencarian dan personalisasi buku bacaan:
 
