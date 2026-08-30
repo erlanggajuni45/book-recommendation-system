@@ -93,6 +93,9 @@ Tahapan ini dilakukan secara berurutan untuk menyesuaikan kebutuhan input dari m
 * **Penggabungan Fitur Metadata Konten (*Content Feature Fusion*)**:
   * **Proses**: Menggabungkan teks judul dan nama penulis ke dalam kolom baru `content_features` (`df_cb['title'] + ' ' + df_cb['authors']`).
   * **Alasan**: Memberikan konteks yang lebih kaya bagi algoritma ekstraksi teks agar dapat menangkap kemiripan tidak hanya dari kata kunci judul, tetapi juga dari kesamaan penulis.
+* ***Feature Extraction* menggunakan TF-IDF Vectorizer**:
+  * **Proses**: Mentransformasikan data teks pada `content_features` menjadi representasi vektor numerik menggunakan `TfidfVectorizer(stop_words='english')`, menghasilkan matriks TF-IDF berdimensi `(9964, 14219)`.
+  * **Alasan**: Algoritma pembelajaran mesin dan perhitungan jarak membutuhkan representasi numerik terbobot (*term frequency-inverse document frequency*) yang mampu merefleksikan signifikansi kata kunci unik tanpa terdistorsi oleh kata umum (*stop words*).
 
 ---
 
