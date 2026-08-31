@@ -211,10 +211,14 @@ Berikut adalah 10 buku teratas yang direkomendasikan secara personal untuk **Use
 
   $$\text{Precision@K} = \frac{\text{Jumlah Item Rekomendasi yang Relevan}}{K}$$
 
-  Pada sistem rekomendasi konten buku ini, sebuah buku dalam daftar Top-$K$ ($K=10$) dikategorikan **relevan** apabila judul atau nama penulisnya memiliki korelasi langsung terhadap tema/karya buku acuan (*The Hunger Games* atau *Suzanne Collins*).
+  Pada sistem rekomendasi konten buku ini, sebuah buku dalam daftar Top-K ($K=10$) dikategorikan **relevan** apabila judul atau nama penulisnya memiliki korelasi langsung terhadap tema/karya buku acuan (*The Hunger Games* atau *Suzanne Collins*).
 * **Hasil Evaluasi**:
-  Dari 10 buku yang direkomendasikan untuk buku *The Hunger Games (The Hunger Games, #1)*, terdapat 8 buku yang terbukti relevan secara langsung dengan seri tersebut (termasuk sekuel resmi, *boxset*, dan *official guide*). 
-  $$\text{Precision@10} = \frac{8}{10} = 80.0$$ (dalam persentase).
+  Dari 10 buku yang direkomendasikan untuk buku *The Hunger Games (The Hunger Games, #1)*, terdapat 8 buku yang terbukti relevan secara langsung dengan seri tersebut (termasuk sekuel resmi, *boxset*, dan *official guide*).
+
+$$
+\text{Precision@10} = \frac{8}{10} = 80.0\\%
+$$
+
   Hasil ini membuktikan bahwa pendekatan *Content-Based Filtering* sangat efektif dalam menemukan buku-buku yang memiliki keselarasan konteks dan tema yang tinggi.
 
 ---
