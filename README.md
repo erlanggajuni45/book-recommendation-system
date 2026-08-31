@@ -175,7 +175,17 @@ Berikut adalah 10 buku teratas yang direkomendasikan berdasarkan tingkat kesamaa
   * Membutuhkan daya komputasi dan memori yang lebih besar untuk proses pelatihan matriks embedding.
 
 #### Output Top-10 Rekomendasi Collaborative Filtering:
-Contoh pengujian rekomendasi personal untuk **User ID: 43140**
+
+Sebelum menyajikan hasil rekomendasi personal, sistem memeriksa riwayat buku yang telah dibaca dan diberi rating tinggi (skala 5) oleh pengguna target guna mengidentifikasi preferensinya:
+
+* **Informasi & Preferensi Pengguna Target (User ID: 43140)**:
+  * **Buku yang Pernah Dibaca & Disukai (Rating 5)**:
+    1. *I Am Legend* karya Richard Matheson (Rating: 5 / 5, Average Rating: 4.07)
+    2. *The Complete Robot (Robot #0.3)* karya Isaac Asimov (Rating: 5 / 5, Average Rating: 4.34)
+  * **Analisis Preferensi Pengguna**: Pengguna memiliki minat dan preferensi yang sangat kuat terhadap literatur bergenre fiksi ilmiah klasik (*classic science fiction*), cerita distopia pasca-apokaliptik, kecerdasan buatan (*robotics*), serta karya-karya berbobot dari penulis legendaris seperti Isaac Asimov dan Richard Matheson.
+  * **Ekspektasi Rekomendasi**: Model diharapkan mampu merekomendasikan karya fiksi epik, fantasi, dan literatur berating tinggi lainnya yang memiliki alur narasi kuat yang belum pernah dibaca oleh pengguna tersebut.
+
+Berikut adalah 10 buku teratas yang direkomendasikan secara personal untuk **User ID: 43140**:
 
 | No | Judul Buku | Penulis | Average Rating |
 |---|---|---|---|
@@ -203,7 +213,7 @@ Contoh pengujian rekomendasi personal untuk **User ID: 43140**
 
   Pada sistem rekomendasi konten buku ini, sebuah buku dalam daftar Top-$K$ ($K=10$) dikategorikan **relevan** apabila judul atau nama penulisnya memiliki korelasi langsung terhadap tema/karya buku acuan (*The Hunger Games* atau *Suzanne Collins*).
 * **Hasil Evaluasi**:
-  Dari 10 buku yang direkomendasikan untuk buku *The Hunger Games (The Hunger Games, #1)*, terdapat 8 buku yang terbukti relevan secara langsung dengan seri tersebut (termasuk sekuel resmi, *boxset*, dan *official guide*).
+  Dari 10 buku yang direkomendasikan untuk buku *The Hunger Games (The Hunger Games, #1)*, terdapat 8 buku yang terbukti relevan secara langsung dengan seri tersebut (termasuk sekuel resmi, *boxset*, dan *official guide*). 
   $$\text{Precision@10} = \frac{8}{10} = 80.0$$ (dalam persentase).
   Hasil ini membuktikan bahwa pendekatan *Content-Based Filtering* sangat efektif dalam menemukan buku-buku yang memiliki keselarasan konteks dan tema yang tinggi.
 
