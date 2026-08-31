@@ -133,7 +133,17 @@ Pada tahap ini, dibangun dua pendekatan sistem rekomendasi yang berbeda untuk me
   * Tidak dapat menangkap kualitas subjektif buku atau preferensi implisit antar-pengguna.
 
 #### Output Top-10 Rekomendasi Content-Based Filtering:
-Contoh pengujian rekomendasi untuk buku: **The Hunger Games (The Hunger Games, #1)**
+
+Sebelum menyajikan hasil rekomendasi, sistem menetapkan satu buku acuan yang dijadikan preferensi pencarian kesamaan konten:
+
+* **Informasi & Karakteristik Buku Acuan**:
+  * **Judul Buku**: *The Hunger Games (The Hunger Games, #1)*
+  * **Penulis**: Suzanne Collins
+  * **Average Rating**: 4.34 / 5.0
+  * **Karakteristik/Konteks Tema**: Novel fiksi ilmiah distopia bertema bertahan hidup (*survival*), aksi petualangan, dan kompetisi gladiator futuristik karya Suzanne Collins.
+  * **Ekspektasi Rekomendasi**: Sistem diharapkan memprioritaskan buku-buku sekuel, trilogi lanjutan, panduan cerita, atau karya terkait dari penulis dan semesta yang sama (*The Hunger Games Trilogy*).
+
+Berikut adalah 10 buku teratas yang direkomendasikan berdasarkan tingkat kesamaan kosinus (*Cosine Similarity*):
 
 | No | Judul Buku | Penulis | Average Rating | Similarity Score |
 |---|---|---|---|---|
