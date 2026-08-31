@@ -36,7 +36,13 @@ books.info()
 
 books.describe(include='all')
 
-"""menampilkan informasi tentang dataset ratings"""
+"""**Interpretasi Data Books:**
+- Dataset `books.csv` memiliki 10.000 baris dan 23 kolom metadata buku.
+- Terdapat 4.664 penulis unik dengan Stephen King sebagai penulis yang memiliki judul buku terbanyak (60 buku).
+- Kolom rating buku (`average_rating`) memiliki nilai minimum 2.47, rata-rata 4.00, dan maksimum 4.82.
+
+menampilkan informasi tentang dataset ratings
+"""
 
 ratings.info()
 
@@ -44,7 +50,11 @@ ratings.info()
 
 ratings.describe(include='all')
 
-"""## **Exploratory Data Analysis (EDA)**
+"""**Interpretasi Data Ratings:**
+- Dataset `ratings.csv` terdiri dari 5.976.479 baris interaksi pemberian rating dari 53.424 pengguna unik untuk 10.000 buku.
+- Skor rating berkisar antara 1 hingga 5 dengan nilai rata-rata penilaian sebesar 3.92 (dibulatkan).
+
+## **Exploratory Data Analysis (EDA)**
 
 Pengecekan missing value
 """
@@ -59,7 +69,13 @@ ratings.isnull().sum()[ratings.isnull().sum() > 0]
 
 print(f'\nJumlah duplikat pada ratings: {ratings.duplicated().sum()}')
 
-"""Visualisasi top 10 penulis dengan buku terbanyak"""
+"""**Interpretasi Pengecekan Data Bersih:**
+- Pada dataset `ratings.csv`, tidak ditemukan data null (0) maupun data duplikat (0).
+- Pada dataset `books.csv`, tidak terdapat data duplikat (0). Terdapat missing value pada kolom `language_code` (1.084), `isbn` (700), `isbn13` (585), `original_title` (585), dan `original_publication_year` (21).
+- Kolom esensial untuk sistem rekomendasi (`book_id`, `title`, `authors`, dan `average_rating`) berstatus lengkap tanpa missing value.
+
+Visualisasi top 10 penulis dengan buku terbanyak
+"""
 
 top_authors = books['authors'].value_counts().head(10)
 
@@ -99,7 +115,13 @@ plt.xlabel('Rata-rata Rating')
 plt.ylabel('Frekuensi')
 plt.show()
 
-"""## **Data Preparation**
+"""**Insight dari Hasil Visualisasi EDA:**
+- **Top Penulis**: Stephen King memimpin dengan 60 buku, diikuti Nora Roberts dan Dean Koontz.
+- **Top Buku Populer**: Seri *The Hunger Games* dan *Harry Potter* menduduki peringkat teratas buku dengan ulasan rating terbanyak (> 4,5 juta ulasan).
+- **Distribusi Rating Pengguna**: Rating didominasi skor 4 dan 5, menunjukkan kecenderungan pembaca memberikan penilaian positif pada buku-buku populer.
+- **Distribusi Average Rating**: Distribusi rata-rata rating berpusat di sekitar nilai 4.0 dengan kurva mendekati distribusi normal.
+
+## **Data Preparation**
 
 ### Untuk Content-Based Filtering
 """
@@ -123,7 +145,10 @@ tf = TfidfVectorizer(stop_words='english')
 tfidf_matrix = tf.fit_transform(df_cb['content_features'])
 tfidf_matrix.shape
 
-"""### Untuk Collaborative Filtering
+"""**Interpretasi Ekstraksi Fitur TF-IDF:**
+- Ekstraksi fitur teks dari 9.964 buku menghasilkan matriks berdimensi `(9964, 14219)`, yang merepresentasikan 14.219 token kata kunci unik dari judul dan nama penulis setelah stopwords bahasa Inggris dieliminasi.
+
+### Untuk Collaborative Filtering
 
 mengambil sampel 100.000 data rating secara acak untuk efisiensi komputasi
 """
@@ -219,7 +244,11 @@ print("Average Rating: 4.34")
 print("\nTop-10 Rekomendasi Buku Mirip:")
 get_content_based_recommendations(sample_book, top_n=10)
 
-"""### Model Collaborative Filtering
+"""**Interpretasi Hasil Rekomendasi Content-Based:**
+- Sistem berhasil merekomendasikan 10 buku yang memiliki kemiripan tertinggi dengan *The Hunger Games (The Hunger Games, #1)*.
+- Tiga peringkat teratas diduduki oleh sekuel resmi karya Suzanne Collins (*The Hunger Games Trilogy Boxset*, *Catching Fire*, dan *Mockingjay*) dengan skor kesamaan kosinus > 0.79.
+
+### Model Collaborative Filtering
 
 import library yang diperlukan
 """
@@ -316,7 +345,12 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 
-"""Fungsi rekomendasi buku untuk spesifik user"""
+"""**Interpretasi Hasil Pelatihan Model Collaborative:**
+- Pada epoch ke-15, model mencapai Training RMSE: 0.2656, Training Loss: 0.6083, Validation RMSE: 0.2812, dan Validation Loss: 0.6271.
+- Kurva konvergensi menunjukkan penurunan error yang konsisten pada data latih dan validasi, mengindikasikan model belajar dengan baik tanpa mengalami overfitting yang parah.
+
+Fungsi rekomendasi buku untuk spesifik user
+"""
 
 def get_collaborative_recommendations(user_id, top_n=10):
   if user_id not in user_to_user_encoded:
@@ -355,7 +389,11 @@ top_user_books[['title', 'authors', 'rating', 'average_rating']].head(5)
 print(f"Top-10 Rekomendasi Buku untuk User ID: {sample_user_id}\n")
 get_collaborative_recommendations(sample_user_id, top_n=10)
 
-"""Evaluasi Content-Based Filtering menggunakan Precision@K
+"""**Interpretasi Rekomendasi Personal User ID 43140:**
+- Pengguna memiliki riwayat rating 5 pada novel sci-fi/fantasi (*I Am Legend* dan *The Complete Robot*).
+- Sistem Collaborative Filtering berhasil merekomendasikan buku-buku fiksi, petualangan, dan fantasi populer berating tinggi seperti serial *Harry Potter*, *The Return of the King*, *The Way of Kings*, dan *Words of Radiance*.
+
+Evaluasi Content-Based Filtering menggunakan Precision@K
 
 Menghitung proporsi rekomendasi yang relevan
 """
@@ -374,3 +412,8 @@ sample_recs = get_content_based_recommendations(sample_book, top_n=10)
 precision_score = evaluate_precision_at_k(sample_recs, relevant_keywords=["hunger", "suzanne collins"], k=10)
 
 print(f"Precision@10 untuk rekomendasi {sample_book}: {precision_score * 100:.1f}%")
+
+"""**Interpretasi Hasil Evaluasi Precision@10:**
+- Dari 10 buku rekomendasi yang dihasilkan untuk *The Hunger Games*, 8 buku terbukti relevan secara langsung dengan semesta/penulis target.
+- Skor Precision@10 mencapai 80.0%, membuktikan model Content-Based Filtering memiliki presisi yang tinggi dalam menemukan konten terkait.
+"""
