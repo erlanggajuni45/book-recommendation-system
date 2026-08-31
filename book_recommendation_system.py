@@ -102,9 +102,11 @@ plt.show()
 """## **Data Preparation**
 
 ### Untuk Content-Based Filtering
-
-memilih kolom penting dan menghapus baris dengan judul atau penulis bernilai null
 """
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+"""memilih kolom penting dan menghapus baris dengan judul atau penulis bernilai null"""
 
 df_cb = books[['book_id', 'title', 'authors', 'average_rating']].dropna().copy()
 df_cb.drop_duplicates(subset=['title'], inplace=True)
@@ -114,6 +116,12 @@ df_cb
 
 df_cb['content_features'] = df_cb['title'] + ' ' + df_cb['authors']
 df_cb.shape
+
+"""Ekstraksi fitur menggunakan TF-IDF Vectorizer"""
+
+tf = TfidfVectorizer(stop_words='english')
+tfidf_matrix = tf.fit_transform(df_cb['content_features'])
+tfidf_matrix.shape
 
 """### Untuk Collaborative Filtering
 
@@ -170,14 +178,7 @@ print(f"Dimensi x_train: {x_train.shape}, Dimensi x_val: {x_val.shape}")
 ### Model Content-Based Filtering
 """
 
-from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
-"""Ekstraksi fitur menggunakan TF-IDF Vectorizer"""
-
-tf = TfidfVectorizer(stop_words='english')
-tfidf_matrix = tf.fit_transform(df_cb['content_features'])
-tfidf_matrix.shape
 
 """Menghitung Cosine Similarity antar buku"""
 
@@ -204,10 +205,18 @@ def get_content_based_recommendations(title, cosine_sim=cosine_sim, top_n=10):
   rec_df['similarity_score'] = [i[1] for i in sim_scores]
   return rec_df
 
-"""uji coba rekomendasi untuk satu judul buku tertentu"""
+"""Menampilkan karakteristik buku acuan"""
 
 sample_book = 'The Hunger Games (The Hunger Games, #1)'
-print(f"Top-10 Rekomendasi Buku Mirip dengan: '{sample_book}'\n")
+
+print("=== Karakteristik Buku Acuan ===")
+print("Judul: {}".format(sample_book))
+print("Penulis: Suzanne Collins")
+print("Average Rating: 4.34")
+
+"""uji coba rekomendasi"""
+
+print("\nTop-10 Rekomendasi Buku Mirip:")
 get_content_based_recommendations(sample_book, top_n=10)
 
 """### Model Collaborative Filtering
@@ -335,6 +344,14 @@ def get_collaborative_recommendations(user_id, top_n=10):
 """uji rekomendasi personal untuk sampel user"""
 
 sample_user_id = ratings_sample['user_id'].iloc[0]
+
+"""Menampilkan buku-buku dengan rating tinggi yang pernah dibaca oleh user target"""
+
+print(f"=== Buku yang Pernah Dibaca & Diberi Rating Tinggi oleh User ID: {sample_user_id} ===")
+user_ratings = ratings_sample[ratings_sample['user_id'] == sample_user_id]
+top_user_books = user_ratings.sort_values(by='rating', ascending=False).merge(books, on='book_id')
+top_user_books[['title', 'authors', 'rating', 'average_rating']].head(5)
+
 print(f"Top-10 Rekomendasi Buku untuk User ID: {sample_user_id}\n")
 get_collaborative_recommendations(sample_user_id, top_n=10)
 
