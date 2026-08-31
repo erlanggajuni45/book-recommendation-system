@@ -182,8 +182,8 @@ Sebelum menyajikan hasil rekomendasi personal, sistem memeriksa riwayat buku yan
   * **Buku yang Pernah Dibaca & Disukai (Rating 5)**:
     1. *I Am Legend* karya Richard Matheson (Rating: 5 / 5, Average Rating: 4.07)
     2. *The Complete Robot (Robot #0.3)* karya Isaac Asimov (Rating: 5 / 5, Average Rating: 4.34)
-  * **Analisis Preferensi Pengguna**: Pengguna memiliki minat dan preferensi yang sangat kuat terhadap literatur bergenre fiksi ilmiah klasik (*classic science fiction*), cerita distopia pasca-apokaliptik, kecerdasan buatan (*robotics*), serta karya-karya berbobot dari penulis legendaris seperti Isaac Asimov dan Richard Matheson.
-  * **Ekspektasi Rekomendasi**: Model diharapkan mampu merekomendasikan karya fiksi epik, fantasi, dan literatur berating tinggi lainnya yang memiliki alur narasi kuat yang belum pernah dibaca oleh pengguna tersebut.
+  * **Analisis Preferensi Pengguna**: Pengguna memiliki minat dan preferensi yang sangat kuat terhadap literatur bergenre fiksi ilmiah klasik (*classic science fiction*), distopia, kecerdasan buatan (*robotics*), serta karya-karya berbobot dari penulis legendaris seperti Isaac Asimov dan Richard Matheson.
+  * **Ekspektasi Rekomendasi**: Model diharapkan mampu merekomendasikan karya fiksi epik, fantasi, dan literatur berkualitas tinggi lainnya yang memiliki alur narasi kuat yang belum pernah dibaca oleh pengguna tersebut.
 
 Berikut adalah 10 buku teratas yang direkomendasikan secara personal untuk **User ID: 43140**:
 
@@ -191,11 +191,11 @@ Berikut adalah 10 buku teratas yang direkomendasikan secara personal untuk **Use
 |---|---|---|---|
 | 1 | Harry Potter and the Goblet of Fire (Harry Potter, #4) | J.K. Rowling, Mary GrandPré | 4.53 |
 | 2 | Harry Potter and the Deathly Hallows (Harry Potter, #7) | J.K. Rowling, Mary GrandPré | 4.61 |
-| 3 | Unbroken: A World War II Story of Survival, Resilience, and Redemption | Laura Hillenbrand | 4.40 |
-| 4 | Cutting for Stone | Abraham Verghese | 4.28 |
-| 5 | Harry Potter Boxset (Harry Potter, #1-7) | J.K. Rowling | 4.74 |
-| 6 | Hyperion (Hyperion Cantos, #1) | Dan Simmons | 4.21 |
-| 7 | The Little House Collection (Little House, #1-9) | Laura Ingalls Wilder, Garth Williams | 4.33 |
+| 3 | The Return of the King (The Lord of the Rings, #3) | J.R.R. Tolkien | 4.51 |
+| 4 | The Last Olympian (Percy Jackson and the Olympians, #5) | Rick Riordan | 4.50 |
+| 5 | The Way of Kings (The Stormlight Archive, #1) | Brandon Sanderson | 4.64 |
+| 6 | The Little House Collection (Little House, #1-9) | Laura Ingalls Wilder, Garth Williams | 4.33 |
+| 7 | Calvin and Hobbes | Bill Watterson, G.B. Trudeau | 4.61 |
 | 8 | Words of Radiance (The Stormlight Archive, #2) | Brandon Sanderson | 4.77 |
 | 9 | The Complete Anne of Green Gables Boxed Set (Anne of Green Gables, #1-8) | L.M. Montgomery | 4.42 |
 | 10 | Brief Lives (The Sandman #7) | Neil Gaiman, Jill Thompson, Vince Locke, Peter Doherty | 4.55 |
@@ -231,9 +231,9 @@ Berikut adalah 10 buku teratas yang direkomendasikan secara personal untuk **Use
   Di mana $N$ adalah jumlah data evaluasi, $y_i$ adalah rating aktual ternormalisasi, dan $\hat{y}_i$ adalah skor rating yang diprediksi oleh model. Semakin kecil nilai RMSE, semakin akurat model dalam memprediksi preferensi pengguna.
 * **Hasil Evaluasi**:
   Setelah melalui proses pelatihan selama 15 *epochs*, model *RecommenderNet* menghasilkan performa evaluasi sebagai berikut:
-  * **Training RMSE**: $\approx 0.2546$
-  * **Validation RMSE**: $\approx 0.2823$
-  * **Training Loss (Binary Crossentropy)**: $\approx 0.5950$
-  * **Validation Loss (Binary Crossentropy)**: $\approx 0.6283$
+  * **Training RMSE**: $\approx 0.2656$
+  * **Validation RMSE**: $\approx 0.2812$
+  * **Training Loss (Binary Crossentropy)**: $\approx 0.6083$
+  * **Validation Loss (Binary Crossentropy)**: $\approx 0.6271$
 
 Plot konvergensi pada grafik pelatihan menunjukkan penurunan kurva *loss* dan RMSE yang stabil antara data latih dan data validasi tanpa adanya indikasi *overfitting* yang signifikan. Hal ini menunjukkan model mampu memprediksi preferensi laten pembaca dengan tingkat kesalahan yang rendah.
