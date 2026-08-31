@@ -118,12 +118,12 @@ Tahapan ini dilakukan secara berurutan untuk menyesuaikan kebutuhan input dari m
 
 Pada tahap ini, dibangun dua pendekatan sistem rekomendasi yang berbeda untuk menyelesaikan permasalahan pencarian dan personalisasi buku bacaan:
 
-### 1. Model 1: Content-Based Filtering (TF-IDF Vectorizer & Cosine Similarity)
+### 1. Model 1: Content-Based Filtering (Cosine Similarity)
 
 * **Cara Kerja**:
-  * Pendekatan ini mengekstraksi representasi fitur kata kunci dari judul dan nama penulis (`content_features`) menggunakan **TF-IDF Vectorizer** dengan menghapus *english stop words*, menghasilkan matriks representasi berdimensi `(9964, 14219)`.
-  * Derajat kesamaan antar-buku dihitung menggunakan **Cosine Similarity** untuk menghasilkan matriks kesamaan kosinus.
-  * Sistem mengambil indeks buku acuan dan menyajikan $N$ buku teratas dengan skor kemiripan kosinus tertinggi.
+  * Menggunakan matriks representasi numerik TF-IDF yang telah diekstraksi pada tahap Data Preparation.
+  * Menghitung derajat sudut kesamaan antar-buku dihitung menggunakan **Cosine Similarity** untuk menghasilkan matriks kesamaan kosinus.
+  * Sistem memetakan indeks buku acuan dan menyortir $N$ buku teratas yang memiliki nilai *similarity score* tertinggi terhadap buku tersebut.
 * **Kelebihan**:
   * Tidak bergantung pada data interaksi pengguna lain (*user-independent*).
   * Tidak mengalami masalah *cold-start* untuk buku-buku baru selama metadata kontennya tersedia.
